@@ -56,6 +56,13 @@
 			<version>2.2.0</version>
 		</dependency>
 
+		<!-- 引入 druid 对 spring boot 的兼容包-->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid-spring-boot-starter</artifactId>
+			<version>1.2.8</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
