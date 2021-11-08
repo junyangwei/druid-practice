@@ -22,4 +22,20 @@ public class UserController {
     public Object getUser(@Param("id") int id) {
         return this.userServer.getUser(id);
     }
+
+    @GetMapping("/insert")
+    public Object insertUser() {
+        return this.userServer.insertUser();
+    }
+
+    @GetMapping("/delete")
+    public Object deleteUser(@Param("id") int id) {
+        return this.userServer.deleteUser(id);
+    }
+
+    @GetMapping("/update")
+    public Object updateUser(@Param("id") int id, @Param("nickname") String nickname) {
+        return this.userServer.updateUser(id, nickname);
+    }
+
 }
