@@ -1,6 +1,8 @@
 package practice.druidpractice.server.impl;
 
 import org.springframework.stereotype.Service;
+import practice.druidpractice.config.SupportDataSourceEnum;
+import practice.druidpractice.config.UsingDataSource;
 import practice.druidpractice.mapper.UserMapper;
 import practice.druidpractice.po.User;
 import practice.druidpractice.server.UserServer;
@@ -17,6 +19,7 @@ public class UserServerImpl implements UserServer {
     private UserMapper userMapper;
 
     @Override
+    @UsingDataSource(type= SupportDataSourceEnum.SLAVER)
     public User getUser(int id) {
         return this.userMapper.selectUser(id);
     }
