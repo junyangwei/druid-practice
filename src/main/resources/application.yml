@@ -7,44 +7,73 @@ server:
       charset: UTF-8
 
 spring:
-  datasource:
-    # 配置 Spring Boot 的 JDBC 以及 Druid 连接池（属性名一样）
-    url: jdbc:mysql://127.0.0.1:3306/notes?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
-    username: notes
-    password: test
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    # 配置 Druid 的连接池，详见：https://github.com/alibaba/druid/wiki/DruidDataSource%E9%85%8D%E7%BD%AE%E5%B1%9E%E6%80%A7%E5%88%97%E8%A1%A8
-    druid:
-      # 初始化时物理链接个数
-      initial-size: 3
-      # 最大连接池数量
-      max-active: 8
-      # 最小连接池数量
-      min-idle: 3
-      # 获取连接时最大等待时间，单位毫秒
-      max-wait: 3000
-      # 是否缓存 preparedStatement，MySQL 下建议关闭
-      pool-prepared-statements: false
-      # 要启用PSCache，配置大于0时上一项会被自动改为 true
-      max-pool-prepared-statement-per-connection-size: -1
-      # 用来检测连接是否有效的sql
-      validation-query:
-      # 检测连接是否有效的超时时间，单位秒
-      validation-query-timeout: 3
-      # 申请连接时执行 validationQuery 检测连接是否有效，会降低性能
-      test-on-borrow: false
-      # 归还连接时执行 validationQuery 检测连接是否有效，会降低性能
-      test-on-return: false
-      # 建议配置为 true，不影响性能，并保证安全性；申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效
-      test-while-idle: true
-      # 连接池中的minIdle数量以内的链接，空闲时间超过minEvictableIdleTimeMillis，则会执行keepAlive操作
-      keep-alive: false
-      # 两个含义：销毁线程会检测连接间隔时间，testWhileIdle的判断依据
-      time-between-eviction-runs-millis: 60000
-      # 连接保持空闲而不被驱逐的最小时间
-      min-evictable-idle-time-millis: 600000
-      # 扩展插件配置，如监控统计stat，日志log4j，防止SQL注入wall
-      filters: stat,wall #配置多个英文逗号分隔
+#  datasource:
+#    # 配置 Spring Boot 的 JDBC 以及 Druid 连接池（属性名一样）
+#    url: jdbc:mysql://127.0.0.1:3306/notes?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+#    username: notes
+#    password: test
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    # 配置 Druid 的连接池，详见：https://github.com/alibaba/druid/wiki/DruidDataSource%E9%85%8D%E7%BD%AE%E5%B1%9E%E6%80%A7%E5%88%97%E8%A1%A8
+#    druid:
+#      # 初始化时物理链接个数
+#      initial-size: 3
+#      # 最大连接池数量
+#      max-active: 8
+#      # 最小连接池数量
+#      min-idle: 3
+#      # 获取连接时最大等待时间，单位毫秒
+#      max-wait: 3000
+#      # 是否缓存 preparedStatement，MySQL 下建议关闭
+#      pool-prepared-statements: false
+#      # 要启用PSCache，配置大于0时上一项会被自动改为 true
+#      max-pool-prepared-statement-per-connection-size: -1
+#      # 用来检测连接是否有效的sql
+#      validation-query:
+#      # 检测连接是否有效的超时时间，单位秒
+#      validation-query-timeout: 3
+#      # 申请连接时执行 validationQuery 检测连接是否有效，会降低性能
+#      test-on-borrow: false
+#      # 归还连接时执行 validationQuery 检测连接是否有效，会降低性能
+#      test-on-return: false
+#      # 建议配置为 true，不影响性能，并保证安全性；申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效
+#      test-while-idle: true
+#      # 连接池中的minIdle数量以内的链接，空闲时间超过minEvictableIdleTimeMillis，则会执行keepAlive操作
+#      keep-alive: false
+#      # 两个含义：销毁线程会检测连接间隔时间，testWhileIdle的判断依据
+#      time-between-eviction-runs-millis: 60000
+#      # 连接保持空闲而不被驱逐的最小时间
+#      min-evictable-idle-time-millis: 600000
+#      # 扩展插件配置，如监控统计stat，日志log4j，防止SQL注入wall
+#      filters: stat,wall #配置多个英文逗号分隔
+  # 配置 shardingsphere，参考：https://shardingsphere.apache.org/document/4.1.1/en/manual/sharding-jdbc/usage/read-write-splitting/
+  shardingsphere:
+    datasource:
+      names: master,slave0,slave1
+      master:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/sell
+        username: root
+        password: 123456
+      slave0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/sell
+        username: slaver
+        password: 112233
+      slave1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/sell
+        username: slaver
+        password: 112233
+    masterslave:
+      name: ms
+      master-data-source-name: master
+      slave-data-source-names: slave0,slave1
+    props:
+      sql:
+        show: true
 
 mybatis:
   configuration:

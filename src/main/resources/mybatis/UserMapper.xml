@@ -6,24 +6,24 @@
 
     <select id="selectUser" resultType="practice.druidpractice.po.User">
         SELECT *
-        FROM user
+        FROM users
         WHERE id = #{id};
     </select>
 
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="practice.druidpractice.po.User">
-        INSERT INTO user
+        INSERT INTO users
         (username, password, nickname, phone, status)
         VALUES
         (#{username}, #{password}, #{nickname}, #{phone}, 1);
     </insert>
 
     <delete id="deleteUser" parameterType="int">
-        DELETE FROM user
+        DELETE FROM users
         WHERE id = #{id};
     </delete>
 
     <update id="updateUser" parameterType="practice.druidpractice.po.User">
-        UPDATE user
+        UPDATE users
         SET nickname = #{nickname}
         WHERE id = #{id};
     </update>
